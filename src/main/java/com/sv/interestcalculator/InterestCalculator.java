@@ -5,6 +5,7 @@
 
 package com.sv.interestcalculator;
 
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -17,13 +18,35 @@ import java.util.Scanner;
 public class InterestCalculator {
     
     public static void main(String[] args) {
+        
         // get deposit
-        // get 
+        double startBalance = getInput("What is your initial deposit?", 1000, 1000000, "dollars");
+        double endBalance = startBalance;
+        
+        // get interest rate
+        double interest = getInput("What is the interest rate?", 0.1, 25, "percent");
+        
+        // get duration
+        int years = (int)(Math.round(getInput("How many years?", 1, 25, "years")));
+        
+        // loop through years, and calculate and print results
+        System.out.println("\t\tINTEREST\tPRINCIPLE");
+        for (int i = 1; i <= years; i++) {
+            // add interest by year
+            double yearsInterest = endBalance * interest / 100;
+            endBalance += yearsInterest;
+            System.out.printf("Year %02d: \t$%,.2f \t$%,.2f%n", i,yearsInterest, endBalance);
+            
+            // add interest by month
+            // add interest by day
+        }
+        
+        System.out.printf("%nYou made $%,.2f in %d years. Not bad!", endBalance - startBalance, years);
         
     }
     
     
-    private static double getInput(String prompt) {
+    private static double getInput(String prompt, double min, double max, String units) {
         
         Scanner scanner = new Scanner(System.in);
         
@@ -36,14 +59,14 @@ public class InterestCalculator {
             
             try {
                 number = Double.parseDouble(input);
-                if (number < 1 || number > 25) {
+                if (number < min || number > max) {
                     throw new Exception();
                 }
                 return number;
             } catch (NumberFormatException e) {
                 System.out.println("That wasn't a number. Try again.\n");
             } catch (Exception e) {
-                System.out.println("That number wasn't valid. Try again. \n");
+                System.out.printf(Locale.US,"That number wasn't valid. it must be between %,.2f and %,.2f %s.\n", min, max, units);
             }
         }
     }
